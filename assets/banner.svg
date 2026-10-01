@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="100%" role="img" aria-label="Sara Shafiee: AI for engineering and multi-agent systems">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#1b1640"/></linearGradient>
+<linearGradient id="tx" x1="0" x2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#c4b5fd"/></linearGradient>
+<radialGradient id="glow"><stop offset="0" stop-color="#a78bfa" stop-opacity=".55"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/></radialGradient></defs>
+<style>.e{stroke:#6366f1;stroke-opacity:.35;stroke-width:1.2}.n{fill:#c4b5fd}.p{fill:#7dd3fc}@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}.n{animation:pulse 3s ease-in-out infinite}</style>
+<rect width="1200" height="300" rx="18" fill="url(#bg)"/>
+<path id="e0_13" class="e" d="M951,68 L1026,42"/>
+<path id="e0_16" class="e" d="M951,68 L1049,66"/>
+<path id="e1_7" class="e" d="M1024,196 L1064,137"/>
+<path id="e1_16" class="e" d="M1024,196 L1049,66"/>
+<path id="e2_6" class="e" d="M669,48 L658,52"/>
+<path id="e2_8" class="e" d="M669,48 L691,91"/>
+<path id="e3_8" class="e" d="M716,123 L691,91"/>
+<path id="e3_15" class="e" d="M716,123 L756,104"/>
+<path id="e4_12" class="e" d="M679,262 L683,177"/>
+<path id="e4_9" class="e" d="M679,262 L712,171"/>
+<path id="e5_16" class="e" d="M1139,84 L1049,66"/>
+<path id="e5_7" class="e" d="M1139,84 L1064,137"/>
+<path id="e6_8" class="e" d="M658,52 L691,91"/>
+<path id="e7_16" class="e" d="M1064,137 L1049,66"/>
+<path id="e9_17" class="e" d="M712,171 L740,176"/>
+<path id="e9_12" class="e" d="M712,171 L683,177"/>
+<path id="e10_16" class="e" d="M1054,45 L1049,66"/>
+<path id="e10_13" class="e" d="M1054,45 L1026,42"/>
+<path id="e11_15" class="e" d="M746,87 L756,104"/>
+<path id="e11_3" class="e" d="M746,87 L716,123"/>
+<path id="e12_17" class="e" d="M683,177 L740,176"/>
+<path id="e13_16" class="e" d="M1026,42 L1049,66"/>
+<path id="e14_0" class="e" d="M846,41 L951,68"/>
+<path id="e14_15" class="e" d="M846,41 L756,104"/>
+<circle class="p" r="2.6"><animateMotion dur="2.5s" repeatCount="indefinite"><mpath href="#e0_13"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#e1_7"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="3.9s" repeatCount="indefinite"><mpath href="#e2_6"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="4.6s" repeatCount="indefinite"><mpath href="#e3_8"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="5.3s" repeatCount="indefinite"><mpath href="#e4_12"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="2.5s" repeatCount="indefinite"><mpath href="#e5_16"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#e6_8"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="3.9s" repeatCount="indefinite"><mpath href="#e9_17"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="4.6s" repeatCount="indefinite"><mpath href="#e10_16"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="5.3s" repeatCount="indefinite"><mpath href="#e11_15"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="2.5s" repeatCount="indefinite"><mpath href="#e12_17"/></animateMotion></circle>
+<circle class="p" r="2.6"><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#e14_0"/></animateMotion></circle>
+<circle cx="951" cy="68" r="21" fill="url(#glow)"/><circle class="n" cx="951" cy="68" r="7" style="animation-delay:0.0s"/>
+<circle cx="1024" cy="196" r="12" fill="url(#glow)"/><circle class="n" cx="1024" cy="196" r="4" style="animation-delay:0.5s"/>
+<circle cx="669" cy="48" r="12" fill="url(#glow)"/><circle class="n" cx="669" cy="48" r="4" style="animation-delay:1.0s"/>
+<circle cx="716" cy="123" r="12" fill="url(#glow)"/><circle class="n" cx="716" cy="123" r="4" style="animation-delay:1.5s"/>
+<circle cx="679" cy="262" r="21" fill="url(#glow)"/><circle class="n" cx="679" cy="262" r="7" style="animation-delay:2.0s"/>
+<circle cx="1139" cy="84" r="12" fill="url(#glow)"/><circle class="n" cx="1139" cy="84" r="4" style="animation-delay:2.5s"/>
+<circle cx="658" cy="52" r="12" fill="url(#glow)"/><circle class="n" cx="658" cy="52" r="4" style="animation-delay:0.0s"/>
+<circle cx="1064" cy="137" r="12" fill="url(#glow)"/><circle class="n" cx="1064" cy="137" r="4" style="animation-delay:0.5s"/>
+<circle cx="691" cy="91" r="21" fill="url(#glow)"/><circle class="n" cx="691" cy="91" r="7" style="animation-delay:1.0s"/>
+<circle cx="712" cy="171" r="12" fill="url(#glow)"/><circle class="n" cx="712" cy="171" r="4" style="animation-delay:1.5s"/>
+<circle cx="1054" cy="45" r="12" fill="url(#glow)"/><circle class="n" cx="1054" cy="45" r="4" style="animation-delay:2.0s"/>
+<circle cx="746" cy="87" r="12" fill="url(#glow)"/><circle class="n" cx="746" cy="87" r="4" style="animation-delay:2.5s"/>
+<circle cx="683" cy="177" r="21" fill="url(#glow)"/><circle class="n" cx="683" cy="177" r="7" style="animation-delay:0.0s"/>
+<circle cx="1026" cy="42" r="12" fill="url(#glow)"/><circle class="n" cx="1026" cy="42" r="4" style="animation-delay:0.5s"/>
+<circle cx="846" cy="41" r="12" fill="url(#glow)"/><circle class="n" cx="846" cy="41" r="4" style="animation-delay:1.0s"/>
+<circle cx="756" cy="104" r="12" fill="url(#glow)"/><circle class="n" cx="756" cy="104" r="4" style="animation-delay:1.5s"/>
+<circle cx="1049" cy="66" r="21" fill="url(#glow)"/><circle class="n" cx="1049" cy="66" r="7" style="animation-delay:2.0s"/>
+<circle cx="740" cy="176" r="12" fill="url(#glow)"/><circle class="n" cx="740" cy="176" r="4" style="animation-delay:2.5s"/>
+<text x="60" y="118" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="54" font-weight="700" fill="url(#tx)">Sara Shafiee</text>
+<text x="62" y="160" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" fill="#e2e8f0">Senior Researcher · Technical University of Denmark</text>
+<text x="62" y="196" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" fill="#94a3b8">Teaching machines to reason about engineering,</text>
+<text x="62" y="220" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" fill="#94a3b8">one agent at a time.</text>
+<rect x="60" y="244" width="266" height="30" rx="15" fill="#22c55e" fill-opacity=".15" stroke="#22c55e" stroke-opacity=".6"/>
+<circle cx="80" cy="259" r="5" fill="#22c55e"><animate attributeName="opacity" values="1;.3;1" dur="2s" repeatCount="indefinite"/></circle>
+<text x="93" y="264" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#bbf7d0">Open to collaborations &amp; visits</text>
+</svg>
