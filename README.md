@@ -15,7 +15,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/95%2B%20publications-8b5cf6?style=for-the-badge" alt="95+ publications"/>
-  <img src="https://img.shields.io/badge/DFF%20Principal%20Investigator-0ea5e9?style=for-the-badge" alt="DFF Principal Investigator"/>
+  <a href="https://github.com/Sara-Shafiee-lab"><img src="https://img.shields.io/badge/DFF%20Principal%20Investigator%20%C2%B7%20RECODE-0ea5e9?style=for-the-badge" alt="DFF Principal Investigator: RECODE"/></a>
 </p>
 
 ---
@@ -35,7 +35,7 @@ I'm a Senior Researcher at DTU's Department of Civil and Mechanical Engineering 
 
 ### 🚀 Current projects
 
-- **RECODE** · *Independent Research Fund Denmark (DFF), PI*: revolutionizing engineer-to-order companies with deep learning and advanced recommendation systems for product design
+- [**RECODE**](https://github.com/Sara-Shafiee-lab/RECODE) · **Principal Investigator**, Independent Research Fund Denmark (DFF) · hosted in my [lab](https://github.com/Sara-Shafiee-lab): revolutionizing engineer-to-order companies with deep learning and advanced recommendation systems for product design
 - **Multi-agent LLM systems**: architectures and evaluation methods for agentic AI in engineering and manufacturing
 
 ### 📚 Recent publications
