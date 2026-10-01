@@ -36,7 +36,7 @@ I'm a Senior Researcher at DTU's Department of Civil and Mechanical Engineering 
 ### 📚 Recent publications
 
 <!--PUBLICATIONS:START-->
-- Loading...
+- Publication list is being connected to ORCID, see [Google Scholar](https://scholar.google.com/citations?user=LjqT4OEAAAAJ&hl=en) in the meantime.
 <!--PUBLICATIONS:END-->
 
 <sub>↻ This list updates automatically every week from ORCID. Full list: <a href="https://scholar.google.com/citations?user=LjqT4OEAAAAJ&hl=en">Google Scholar</a> · <a href="https://orbit.dtu.dk/en/persons/sara-shafiee/">DTU Orbit</a></sub>
