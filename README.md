@@ -53,6 +53,18 @@ I'm a Senior Researcher at DTU's Department of Civil and Mechanical Engineering 
 
 <sub>↻ This list updates automatically every week from ORCID. Full list: <a href="https://scholar.google.com/citations?user=LjqT4OEAAAAJ&hl=en">Google Scholar</a> · <a href="https://orbit.dtu.dk/en/persons/sara-shafiee/">DTU Orbit</a></sub>
 
+### 🧑‍🔬 Research code & lab
+
+My group's shared space on GitHub is **[Sara Shafiee Lab](https://github.com/Sara-Shafiee-lab)**, home of the DFF-funded [**RECODE**](https://github.com/Sara-Shafiee-lab/RECODE) project.
+
+| Paper | Venue | Code |
+|---|---|---|
+| CPJudgeBench: Meta-Evaluation of LLM Judges for Constraint Programming through Solution-Space Semantics | EMNLP 2026 (Main) | [Nastaran95/CPJudgeBench](https://github.com/Nastaran95/CPJudgeBench) |
+| Evaluating Agentic AI Systems in Manufacturing: A Review of Taxonomy, Challenges, and Future Directions | AAIML 2026 | [Nastaran95/manufacturing-agentic-evaluation](https://github.com/Nastaran95/manufacturing-agentic-evaluation) |
+| Agentic Data Analysis for Intelligent Manufacturing: Benchmark-Driven Evaluation of Agentic vs. Direct LLM Approaches | CIRPe 2025 | [Nastaran95/agentic-man-da](https://github.com/Nastaran95/agentic-man-da) |
+
+<sub>Code maintained by my PhD student <a href="https://github.com/Nastaran95">Nastaran Moradzadeh Farid</a>.</sub>
+
 ### 🏆 Recognition
 
 - 🥇 **Agnes & Betzy Award** (2025)
