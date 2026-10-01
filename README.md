@@ -1,4 +1,4 @@
-<p align="center"><img src="assets/banner-v4.svg" alt="Sara Shafiee: Senior Researcher / Associate Professor at DTU" width="100%"/></p>
+<p align="center"><a href="#"><img src="assets/banner-v4.svg" alt="Sara Shafiee: Senior Researcher / Associate Professor at DTU" width="100%"/></a></p>
 
 <p align="center">
   <b>AI for complex engineering systems · multi-agent LLM systems · digital manufacturing</b><br/>
