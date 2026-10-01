@@ -69,6 +69,9 @@ def main():
     groups = fetch_works()
     entries = [extract_entry(g) for g in groups]
     entries = [e for e in entries if e]
+    # Skip editorial notices (retractions, corrections, errata) — not research outputs
+    skip = re.compile(r"^\s*(retraction|correction|erratum|corrigendum|expression of concern)", re.I)
+    entries = [e for e in entries if not skip.match(e[1])]
     entries.sort(key=lambda e: e[0], reverse=True)
     seen, unique = set(), []
     for e in entries:
