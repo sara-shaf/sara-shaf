@@ -1,4 +1,4 @@
-<p align="center"><img src="assets/banner-v2.svg" alt="Sara Shafiee: Senior Researcher at DTU" width="100%"/></p>
+<p align="center"><img src="assets/banner-v3.svg" alt="Sara Shafiee: Senior Researcher / Associate Professor at DTU" width="100%"/></p>
 
 <p align="center">
   <b>AI for complex engineering systems · multi-agent LLM systems · digital manufacturing</b><br/>
@@ -23,7 +23,7 @@
 
 ### 🧭 About me
 
-I'm a Senior Researcher at DTU's Department of Civil and Mechanical Engineering (Engineering Design and Manufacturing Systems). My research sits at the intersection of **artificial intelligence, complex engineering systems, and digital manufacturing**: building computational models, machine-learning methods, and simulation frameworks that support data-driven decision-making in product development and manufacturing.
+I'm a Senior Researcher / Associate Professor at DTU's Department of Civil and Mechanical Engineering (Engineering Design and Manufacturing Systems). My research sits at the intersection of **artificial intelligence, complex engineering systems, and digital manufacturing**: building computational models, machine-learning methods, and simulation frameworks that support data-driven decision-making in product development and manufacturing.
 
 ### 🔬 Research focus
 
