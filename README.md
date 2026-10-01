@@ -9,12 +9,13 @@
   <a href="https://sara-shaf.github.io"><img src="https://img.shields.io/badge/Website-0A66C2?style=flat-square&logo=googlechrome&logoColor=white" alt="Website"/></a>
   <a href="https://scholar.google.com/citations?user=LjqT4OEAAAAJ&hl=en"><img src="https://img.shields.io/badge/Google%20Scholar-4285F4?style=flat-square&logo=googlescholar&logoColor=white" alt="Google Scholar"/></a>
   <a href="https://orcid.org/0000-0001-9433-5060"><img src="https://img.shields.io/badge/ORCID-A6CE39?style=flat-square&logo=orcid&logoColor=white" alt="ORCID"/></a>
+  <a href="https://www.scopus.com/authid/detail.uri?authorId=56492736800"><img src="https://img.shields.io/badge/Scopus-E9711C?style=flat-square&logo=elsevier&logoColor=white" alt="Scopus"/></a>
   <a href="https://orbit.dtu.dk/en/persons/sara-shafiee/"><img src="https://img.shields.io/badge/DTU%20Orbit-990000?style=flat-square" alt="DTU Orbit"/></a>
   <a href="https://www.linkedin.com/in/sarashafiee/"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn"/></a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/95%2B%20publications-8b5cf6?style=for-the-badge" alt="95+ publications"/>
+  <a href="https://orbit.dtu.dk/en/persons/sara-shafiee/publications/"><img src="https://img.shields.io/badge/95%2B%20publications-8b5cf6?style=for-the-badge" alt="95+ publications"/></a>
   <a href="https://github.com/Sara-Shafiee-lab"><img src="https://img.shields.io/badge/DFF%20Principal%20Investigator%20%C2%B7%20RECODE-0ea5e9?style=for-the-badge" alt="DFF Principal Investigator: RECODE"/></a>
 </p>
 
@@ -51,7 +52,7 @@ I'm a Senior Researcher at DTU's Department of Civil and Mechanical Engineering 
 - [An iterative consumer-centric and technology-driven product innovation strategy based on selective and dynamic consumer attention](https://doi.org/10.1016/j.techfore.2024.123713) — Technological Forecasting and Social Change · 2024
 <!--PUBLICATIONS:END-->
 
-<sub>↻ This list updates automatically every week from ORCID. Full list: <a href="https://scholar.google.com/citations?user=LjqT4OEAAAAJ&hl=en">Google Scholar</a> · <a href="https://orbit.dtu.dk/en/persons/sara-shafiee/">DTU Orbit</a></sub>
+<sub>↻ This list updates automatically every week from ORCID. Full list: <a href="https://www.scopus.com/authid/detail.uri?authorId=56492736800">Scopus</a> · <a href="https://scholar.google.com/citations?user=LjqT4OEAAAAJ&hl=en">Google Scholar</a> · <a href="https://orbit.dtu.dk/en/persons/sara-shafiee/">DTU Orbit</a></sub>
 
 ### 🧑‍🔬 Research code & lab
 
