@@ -43,12 +43,12 @@ I'm a Senior Researcher at DTU's Department of Civil and Mechanical Engineering 
 <!--PUBLICATIONS:START-->
 - [How Consumer Attention Shapes Personalized Experiences in Generative AI Products: A Configurational Perspective](https://doi.org/10.1111/ijcs.70199) — International Journal of Consumer Studies · 2026
 - [Evaluating Agentic AI Systems in Manufacturing: A Review of Taxonomy, Challenges and Future Directions](https://doi.org/10.1109/AAIML67890.2026.11498174) — Proceedings of the 2026 International Conference on Advances in Artificial Intelligence and Machine Learning · 2026
-- [Retraction Note: Improving Financial Literacy and Supporting Financial Decisions: Developing a Personalized Configurator](https://doi.org/10.1007/s13132-025-03062-4) — Journal of the Knowledge Economy · 2025
 - [Synthetic data generation in manufacturing: A review of ethical and bias challenges](https://doi.org/10.1145/3800227.3800303) — 2025
 - [Unsupervised Deep Learning for Rolling Bearing Anomaly Detection](https://doi.org/10.1145/3800227.3800273) — 2025
 - [Enhancing efficiency and sustainability in construction: a product configurator for customizable off-site building solutions](https://doi.org/10.1080/17452007.2024.2434589) — Architectural Engineering and Design Management · 2025
 - [Diversity and Team Learning in Intraorganizational Project Teams: The Mediating Role of Shared Leadership](https://doi.org/10.1177/87569728241270600) — Project Management Journal · 2025
 - [Generative AI in manufacturing: a literature review of recent applications and future prospects](https://doi.org/10.1016/j.procir.2025.01.001) — Procedia CIRP · 2025
+- [An iterative consumer-centric and technology-driven product innovation strategy based on selective and dynamic consumer attention](https://doi.org/10.1016/j.techfore.2024.123713) — Technological Forecasting and Social Change · 2024
 <!--PUBLICATIONS:END-->
 
 <sub>↻ This list updates automatically every week from ORCID. Full list: <a href="https://scholar.google.com/citations?user=LjqT4OEAAAAJ&hl=en">Google Scholar</a> · <a href="https://orbit.dtu.dk/en/persons/sara-shafiee/">DTU Orbit</a></sub>
