@@ -16,7 +16,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/95%2B%20publications-8b5cf6?style=for-the-badge" alt="95+ publications"/>
   <img src="https://img.shields.io/badge/DFF%20Principal%20Investigator-0ea5e9?style=for-the-badge" alt="DFF Principal Investigator"/>
-  <img src="https://img.shields.io/badge/Open%20to%20collaborations%20%26%20visits-22c55e?style=for-the-badge" alt="Open to collaborations and visits"/>
 </p>
 
 ---
@@ -60,13 +59,15 @@ I'm a Senior Researcher at DTU's Department of Civil and Mechanical Engineering 
 - **Founder & CEO, DivERS**
 - Former IT Project Manager & Senior Business Consultant, **Haldor Topsøe**
 
-### 🤝 Open to collaborations & visits
+### 🤝 Work with me
 
-I welcome new collaborations and research visits, in both directions:
-
-- 🔬 **Research collaborations**: joint papers, grant proposals, and shared projects in AI for engineering and manufacturing
-- 🏭 **Industry partnerships**: applying AI, recommendation systems, and agentic workflows to real engineering and manufacturing problems
-- ✈️ **Research visits**: hosting visiting researchers and PhD students at DTU, and visiting other groups and institutions
-- 🎓 **PhD & postdoc inquiries**: always happy to hear from motivated candidates
-
-📫 **sashaf [at] dtu [dot] dk** · 🌐 [sara-shaf.github.io](https://sara-shaf.github.io) · 💼 [LinkedIn](https://www.linkedin.com/in/sarashafiee/)
+> [!TIP]
+> **Open to students and researchers**
+>
+> I welcome students and researchers who would like to work with me on AI for engineering and manufacturing, multi-agent LLM systems, and recommendation systems.
+>
+> - 🎓 **Students:** MSc thesis projects, PhD positions, and research assistant roles
+> - 🔬 **Researchers:** postdocs, visiting researchers, and joint projects or grant proposals
+> - ✈️ **Visits:** I host visiting researchers and PhD students at DTU and am glad to visit other groups
+>
+> 📫 Get in touch: **sashaf [at] dtu [dot] dk**
