@@ -80,7 +80,7 @@ My group's shared space on GitHub is **[Sara Shafiee Lab](https://github.com/Sar
 ### 💼 Beyond academia
 
 - **Founder & CEO, DivERS**
-- Former IT Project Manager & Senior Business Consultant, **Haldor Topsøe**
+- Former IT Project Manager & Senior Business Consultant, **Topsoe**
 
 ### 🤝 Work with me
 
