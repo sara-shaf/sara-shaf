@@ -2,7 +2,8 @@
 
 <p align="center">
   <b>Senior Researcher · Technical University of Denmark (DTU)</b><br/>
-  AI for complex engineering systems · multi-agent LLM systems · digital manufacturing
+  AI for complex engineering systems · multi-agent LLM systems · digital manufacturing<br/>
+  📍 Copenhagen, Denmark
 </p>
 
 <p align="center">
