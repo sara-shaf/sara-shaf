@@ -1,8 +1,7 @@
-<h1 align="center">Hi, I'm Sara Shafiee 👋</h1>
+<p align="center"><img src="assets/banner.svg" alt="Sara Shafiee: Senior Researcher at DTU, open to collaborations and visits" width="100%"/></p>
 
 <p align="center">
-  <b>Senior Researcher · Technical University of Denmark (DTU)</b><br/>
-  AI for complex engineering systems · multi-agent LLM systems · digital manufacturing<br/>
+  <b>AI for complex engineering systems · multi-agent LLM systems · digital manufacturing</b><br/>
   📍 Copenhagen, Denmark
 </p>
 
@@ -12,6 +11,12 @@
   <a href="https://orcid.org/0000-0001-9433-5060"><img src="https://img.shields.io/badge/ORCID-0000--0001--9433--5060-A6CE39?style=flat-square&logo=orcid&logoColor=white" alt="ORCID"/></a>
   <a href="https://orbit.dtu.dk/en/persons/sara-shafiee/"><img src="https://img.shields.io/badge/DTU%20Orbit-Publications-990000?style=flat-square" alt="DTU Orbit"/></a>
   <a href="https://www.linkedin.com/in/sarashafiee/"><img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn"/></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/publications-95%2B-8b5cf6?style=for-the-badge" alt="95+ publications"/>
+  <img src="https://img.shields.io/badge/DFF-Principal%20Investigator-0ea5e9?style=for-the-badge" alt="DFF Principal Investigator"/>
+  <img src="https://img.shields.io/badge/open%20to-collaborations%20%26%20visits-22c55e?style=for-the-badge" alt="Open to collaborations and visits"/>
 </p>
 
 ---
@@ -55,7 +60,13 @@ I'm a Senior Researcher at DTU's Department of Civil and Mechanical Engineering 
 - **Founder & CEO, DivERS**
 - Former IT Project Manager & Senior Business Consultant, **Haldor Topsøe**
 
-### 🤝 Let's connect
+### 🤝 Open to collaborations & visits
 
-Open to research collaborations, industry partnerships, and PhD/postdoc inquiries in AI for engineering and manufacturing.
-📫 **sashaf [at] dtu [dot] dk** · 🌐 [sara-shaf.github.io](https://sara-shaf.github.io)
+I welcome new collaborations and research visits, in both directions:
+
+- 🔬 **Research collaborations**: joint papers, grant proposals, and shared projects in AI for engineering and manufacturing
+- 🏭 **Industry partnerships**: applying AI, recommendation systems, and agentic workflows to real engineering and manufacturing problems
+- ✈️ **Research visits**: hosting visiting researchers and PhD students at DTU, and visiting other groups and institutions
+- 🎓 **PhD & postdoc inquiries**: always happy to hear from motivated candidates
+
+📫 **sashaf [at] dtu [dot] dk** · 🌐 [sara-shaf.github.io](https://sara-shaf.github.io) · 💼 [LinkedIn](https://www.linkedin.com/in/sarashafiee/)
