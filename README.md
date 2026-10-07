@@ -55,9 +55,9 @@ I'm a Senior Researcher / Associate Professor at DTU's Department of Civil and M
 
 ### 🗺️ Research map
 
-<p align="center"><a href="#"><img src="assets/research-map.svg" alt="Research map: publications grouped by theme" width="100%"/></a></p>
+<p align="center"><a href="#"><img src="assets/research-map-v2.svg" alt="Research embedding map: every publication as a dot, grouped by topic similarity" width="100%"/></a></p>
 
-<p align="center"><a href="#"><img src="assets/research-evolution.svg" alt="Publications per year by theme" width="100%"/></a></p>
+<p align="center"><a href="#"><img src="assets/research-evolution-v2.svg" alt="Publications per year by theme" width="100%"/></a></p>
 
 <sub>↻ Updated automatically every week from ORCID.</sub>
 
