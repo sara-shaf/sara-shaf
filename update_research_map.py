@@ -2,7 +2,7 @@
 
 1. Fetches works from ORCID and adds papers not yet on the map (nothing is ever removed).
 2. Embeds all paper titles (TF-IDF + t-SNE) and draws assets/research-map.svg,
-   plus a per-year chart in assets/research-evolution.svg. Both are animated SVGs.
+   plus a per-year chart, and refreshes the "Explore the clusters" list in README.md.
 """
 import json, math, os, re, sys, urllib.request
 from collections import Counter
@@ -22,7 +22,7 @@ THEME_RULES = [
 ]
 COL = {"pcs": "#7dd3fc", "agile": "#a78bfa", "aec": "#34d399", "rec": "#f472b6", "org": "#94a3b8", "ai": "#fbbf24", "other": "#fb923c"}
 SHORT = {"pcs": "Product configuration", "agile": "Agile & model-driven", "aec": "Construction & modular",
-         "rec": "Recommender systems", "org": "Digital transformation", "ai": "AI agents & manufacturing", "other": "Beyond engineering"}
+         "rec": "Recommender systems", "org": "Digital transformation", "ai": "AI for manufacturing", "other": "Beyond engineering"}
 ORDER = ["pcs", "agile", "aec", "org", "rec", "ai", "other"]
 MONO = 'font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"'
 SANS = 'font-family="Segoe UI, Helvetica, Arial, sans-serif"'
@@ -78,6 +78,35 @@ def embed(pubs):
     return Z, X
 
 
+GENERIC = set("""study case review approach analysis framework systems system using based case-study literature
+literature review company companies research towards paper new evaluation process processes industry industrial high intermediate performance development""".split())
+
+
+def cluster_keywords(pubs, k, n=3):
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    import numpy as np
+    titles = [p["t"] for p in pubs]
+    v = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), min_df=2, sublinear_tf=True)
+    X = v.fit_transform(titles).toarray()
+    terms = v.get_feature_names_out()
+    inside = np.array([p["th"] == k for p in pubs])
+    if inside.sum() == 0:
+        return []
+    score = X[inside].mean(0) - 0.5 * X[~inside].mean(0)
+    out = []
+    for i in np.argsort(-score):
+        t = terms[i]
+        own = set(re.findall(r"[a-z]+", SHORT[k].lower()))
+        if any(w in GENERIC or w in own or w.rstrip("s") in own for w in t.split()) or score[i] <= 0:
+            continue
+        if any(t in o or o in t for o in out):
+            continue
+        out.append(t)
+        if len(out) == n:
+            break
+    return out
+
+
 def halo_text(x, y, text, size, fill, weight=700, anchor="middle", extra=""):
     base = f'x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}" {SANS} font-size="{size}" font-weight="{weight}" {extra}'
     return (f'<text {base} stroke="#0b0e22" stroke-width="7" stroke-linejoin="round" fill="#0b0e22">{escape(text)}</text>'
@@ -89,7 +118,7 @@ def draw_map(data, path):
     pubs = data["pubs"]
     Z, X = embed(pubs)
     W, H = 1100, 820
-    x0, x1, y0, y1 = 70, 1030, 165, 720
+    x0, x1, y0, y1 = 50, 640, 150, 715
     mn, mx = Z.min(0), Z.max(0)
     P = (Z - mn) / (mx - mn + 1e-9)
     P[:, 0] = x0 + P[:, 0] * (x1 - x0)
@@ -112,13 +141,10 @@ def draw_map(data, path):
         o.append(f'<circle cx="{40+i*20}" cy="36" r="6" fill="{c}"/>')
     o.append(f'<text x="40" y="68" {MONO} font-size="21" fill="#7dd3fc">$ embed --papers {len(pubs)} --method tfidf+tsne</text>')
     o.append(f'<text x="40" y="94" {MONO} font-size="19" fill="#9aa3bf">&#8594; {len(ORDER)} research clusters &#183; {ymin}&#8211;{ymax}</text>')
-    o.append(f'<text x="{W-120}" y="68" text-anchor="end" {MONO} font-size="19" fill="#9aa3bf">epoch</text>')
-    for y in range(ymin, ymax + 1):
-        a, b = t_of(y), (t_of(y + 1) if y < ymax else 1.0)
-        vis = "visible" if y == ymax else "hidden"
-        o.append(f'<text x="{W-60}" y="94" text-anchor="end" {MONO} font-size="30" font-weight="700" fill="#fbbf24" visibility="{vis}">{y}'
-                 f'<animate attributeName="visibility" values="hidden;visible;hidden" keyTimes="0;{a:.4f};{min(b,0.9999):.4f}" calcMode="discrete" dur="{LOOP}s" repeatCount="indefinite"/></text>')
-    o.append(f'<rect x="{W-54}" y="70" width="12" height="26" fill="#7dd3fc"><animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite"/></rect>')
+    newest = max(pubs, key=lambda p: p["y"])
+    nt = newest["t"].split(":")[0] if len(newest["t"].split(":")[0]) <= 58 else newest["t"][:56].rsplit(" ", 1)[0] + "…"
+    o.append(f'<text x="{W-40}" y="68" text-anchor="end" {MONO} font-size="17" fill="#9aa3bf">newest ({newest["y"]})</text>')
+    o.append(f'<text x="{W-40}" y="94" text-anchor="end" {MONO} font-size="17" fill="#fbbf24">{escape(nt)}</text>')
     # nearest-neighbour graph (in embedding space) for a neural-network look
     D = ((P[:, None, :] - P[None, :, :]) ** 2).sum(-1)
     np.fill_diagonal(D, 1e9)
@@ -129,48 +155,32 @@ def draw_map(data, path):
                 continue
             edges.add(tuple(sorted((i, int(j)))))
     for i, j in sorted(edges):
-        a = t_of(max(years[i], years[j]))
-        o.append(f'<line x1="{P[i,0]:.1f}" y1="{P[i,1]:.1f}" x2="{P[j,0]:.1f}" y2="{P[j,1]:.1f}" stroke="#818cf8" stroke-opacity=".22" stroke-width="1.2">'
-                 f'<animate attributeName="stroke-opacity" values="0;0;.22;.22" keyTimes="0;{a:.4f};{a+.03:.4f};1" dur="{LOOP}s" repeatCount="indefinite"/></line>')
-    # signals travelling between cluster centres
+        o.append(f'<line x1="{P[i,0]:.1f}" y1="{P[i,1]:.1f}" x2="{P[j,0]:.1f}" y2="{P[j,1]:.1f}" stroke="#818cf8" stroke-opacity=".25" stroke-width="1.2"/>')
     cent = {k: P[[i for i, p in enumerate(pubs) if p["th"] == k]].mean(0) for k in ORDER if any(p["th"] == k for p in pubs)}
-    route = [k for k in ["pcs", "agile", "rec", "ai", "aec", "org", "other"] if k in cent]
-    for n, (a, b) in enumerate(zip(route, route[1:] + route[:1])):
-        (ax, ay), (bx, by) = cent[a], cent[b]
-        o.append(f'<path id="sig{n}" d="M{ax:.1f},{ay:.1f} L{bx:.1f},{by:.1f}" stroke="#fbbf24" stroke-opacity=".10" stroke-dasharray="3 7"/>')
-        o.append(f'<circle r="3.5" fill="#fde68a"><animateMotion dur="{3.2+n*.4:.1f}s" begin="{n*.5:.1f}s" repeatCount="indefinite"><mpath href="#sig{n}"/></animateMotion></circle>')
     # dots
     for i, p in enumerate(pubs):
         x, y = P[i]
-        a = t_of(p["y"])
         r = 8 if p.get("j") else 5.5
         c = COL[p["th"]]
-        anim = f'<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;{a:.4f};{a+.025:.4f};1" dur="{LOOP}s" repeatCount="indefinite"/>'
         if p["y"] >= ymax - 1:
-            o.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r*2.8:.1f}" fill="url(#gold)">{anim}'
-                     f'<animate attributeName="r" values="{r*2:.1f};{r*3.2:.1f};{r*2:.1f}" dur="2.4s" repeatCount="indefinite"/></circle>')
-        o.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{c}" stroke="#0b0e22" stroke-width="1.5"><title>{p["y"]}: {escape(p["t"])}</title>{anim}</circle>')
-    # cluster labels (large, readable on phones)
-    placed = []
-    for k in ORDER:
-        if k not in cent:
-            continue
+            o.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r*2.6:.1f}" fill="url(#gold)"/>')
+        o.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{c}" stroke="#0b0e22" stroke-width="1.5"><title>{p["y"]}: {escape(p["t"])}</title></circle>')
+    # legend panel (right): one row per cluster, newest activity first
+    o.append(f'<rect x="680" y="130" width="{W-700}" height="{H-230}" rx="14" fill="#0b0e22" fill-opacity=".72" stroke="#2a2f52"/>')
+    o.append(f'<text x="704" y="166" {MONO} font-size="17" fill="#9aa3bf">clusters · papers · top topics</text>')
+    keys = sorted([k for k in ORDER if k in cent], key=lambda k: (-sum(p["y"] >= ymax - 2 for p in pubs if p["th"] == k), -max(p["y"] for p in pubs if p["th"] == k)))
+    rowh = (H - 230 - 60) / len(keys)
+    for n, k in enumerate(keys):
         idx = [i for i, p in enumerate(pubs) if p["th"] == k]
-        cx = float(np.median(P[idx, 0])); top = float(P[idx, 1].min())
-        half = len(f"{SHORT[k]} · {len(idx)}") * 24 * 0.30
-        ly = max(150, top - 16)
-        lx = min(max(cx, half + 24), W - half - 24)
-        moved = True
-        while moved:
-            moved = False
-            for (px, py, ph) in placed:
-                if abs(px - lx) < ph + half + 12 and abs(py - ly) < 32:
-                    ly = py - 34 if ly <= py else py + 34
-                    moved = True
-        placed.append((lx, ly, half))
-        o.append(halo_text(lx, ly, f"{SHORT[k]} · {len(idx)}", 24, COL[k]))
-    o.append(halo_text(W / 2, H - 52, "each dot is a paper · closeness = similar topics (TF-IDF + t-SNE of titles)", 19, "#c9cde0", 400))
-    o.append(halo_text(W / 2, H - 24, f"bigger = journal article · glowing = {ymax-1}–{ymax} · updates weekly from ORCID", 19, "#9aa3bf", 400))
+        y = 200 + n * rowh
+        kw = " · ".join(cluster_keywords(pubs, k))
+        o.append(f'<circle cx="714" cy="{y+12:.1f}" r="9" fill="{COL[k]}"/>')
+        o.append(f'<text x="732" y="{y+19:.1f}" {SANS} font-size="22" font-weight="700" fill="{COL[k]}">{escape(SHORT[k])}</text>')
+        o.append(f'<text x="{W-40}" y="{y+19:.1f}" text-anchor="end" {SANS} font-size="22" font-weight="700" fill="#e6e8f2">{len(idx)}</text>')
+        if kw:
+            o.append(f'<text x="732" y="{y+44:.1f}" {SANS} font-size="17" fill="#9aa3bf">{escape(kw)}</text>')
+    o.append(halo_text(W / 2, H - 52, "each dot is a paper · close dots = similar topics (TF-IDF + t-SNE of titles)", 19, "#c9cde0", 400))
+    o.append(halo_text(W / 2, H - 24, f"bigger = journal article · glowing = {ymax-1}–{ymax} · click the map to explore every cluster", 19, "#9aa3bf", 400))
     o.append("</svg>")
     open(path, "w", encoding="utf-8").write("\n".join(o))
 
@@ -203,9 +213,7 @@ def draw_evolution(data, path):
             if not n:
                 continue
             ya, yb = sy(acc + n), sy(acc)
-            o.append(f'<rect x="{x:.1f}" y="{ya:.1f}" width="{bw*0.72:.1f}" height="{yb-ya:.1f}" rx="3" fill="{COL[k]}"><title>{y}: {n} · {escape(SHORT[k])}</title>'
-                     f'<animate attributeName="height" from="0" to="{yb-ya:.1f}" begin="{delay:.2f}s" dur=".6s" fill="freeze"/>'
-                     f'<animate attributeName="y" from="{sy(0):.1f}" to="{ya:.1f}" begin="{delay:.2f}s" dur=".6s" fill="freeze"/></rect>')
+            o.append(f'<rect x="{x:.1f}" y="{ya:.1f}" width="{bw*0.72:.1f}" height="{yb-ya:.1f}" rx="3" fill="{COL[k]}"><title>{y}: {n} · {escape(SHORT[k])}</title></rect>')
             acc += n
         if i % 2 == 0 or len(years) <= 8:
             o.append(f'<text x="{x + bw*0.36:.1f}" y="{T+ph+30}" text-anchor="middle" {SANS} font-size="20" fill="#9aa3bf">{y}</text>')
@@ -218,6 +226,43 @@ def draw_evolution(data, path):
     open(path, "w", encoding="utf-8").write("\n".join(o))
 
 
+def readme_block(data):
+    pubs = data["pubs"]
+    names = {t["k"]: t["n"] for t in data["themes"]}
+    dots = {"pcs": "🔵", "agile": "🟣", "aec": "🟢", "rec": "🩷", "org": "⚪", "ai": "🟡", "other": "🟠"}
+    lines = ["### Explore the clusters", "",
+             "Click a cluster to see its papers. Newest first.", ""]
+    ymax = max(p["y"] for p in pubs)
+    for k in sorted(ORDER, key=lambda k: (-sum(p["y"] >= ymax - 2 for p in pubs if p["th"] == k), -max([p["y"] for p in pubs if p["th"] == k] or [0]))):
+        ps = sorted([p for p in pubs if p["th"] == k], key=lambda p: (-p["y"], p["t"]))
+        if not ps:
+            continue
+        kw = ", ".join(cluster_keywords(pubs, k))
+        lines.append(f"<details><summary>{dots[k]} <b>{escape(names[k])}</b> · {len(ps)} papers · {ps[-1]['y']}–{ps[0]['y']}{' · <i>' + escape(kw) + '</i>' if kw else ''}</summary>")
+        lines.append("")
+        for p in ps:
+            url = f"https://doi.org/{p['doi']}" if p.get("doi") else "https://scholar.google.com/scholar?q=" + urllib.request.quote(p["t"])
+            code = f" · [code]({p['code']})" if p.get("code") else ""
+            venue = f" · *{p['v']}*" if p.get("v") else ""
+            lines.append(f"- **{p['y']}** · [{p['t']}]({url}){venue}{code}")
+        lines.append("")
+        lines.append("</details>")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def update_readme(data, path="README.md"):
+    if not os.path.exists(path):
+        return
+    s = open(path, encoding="utf-8").read()
+    a, b = "<!--CLUSTERS:START-->", "<!--CLUSTERS:END-->"
+    if a not in s or b not in s:
+        return
+    new = s[:s.index(a) + len(a)] + "\n" + readme_block(data) + "\n" + s[s.index(b):]
+    if new != s:
+        open(path, "w", encoding="utf-8").write(new)
+
+
 def main():
     data = json.load(open(DATA_FILE, encoding="utf-8"))
     if "--no-fetch" not in sys.argv:
@@ -227,6 +272,7 @@ def main():
     os.makedirs("assets", exist_ok=True)
     draw_map(data, "assets/research-map-v2.svg")
     draw_evolution(data, "assets/research-evolution-v2.svg")
+    update_readme(data)
     print(f"Drew research map with {len(data['pubs'])} publications.")
 
 
