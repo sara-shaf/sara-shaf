@@ -54,6 +54,14 @@ I'm a Senior Researcher / Associate Professor at DTU's Department of Civil and M
 
 <sub>↻ This list updates automatically every week from ORCID. Full list: <a href="https://www.scopus.com/authid/detail.uri?authorId=56492736800">Scopus</a> · <a href="https://scholar.google.com/citations?user=LjqT4OEAAAAJ&hl=en">Google Scholar</a> · <a href="https://orbit.dtu.dk/en/persons/sara-shafiee/">DTU Orbit</a></sub>
 
+### 🗺️ Research map
+
+<p align="center"><a href="#"><img src="assets/research-map.svg" alt="Research map: publications grouped by theme" width="100%"/></a></p>
+
+<p align="center"><a href="#"><img src="assets/research-evolution.svg" alt="Publications per year by theme" width="100%"/></a></p>
+
+<sub>↻ Updated automatically every week from ORCID.</sub>
+
 ### 🧑‍🔬 Research code & lab
 
 My group's shared space on GitHub is **[Sara Shafiee Lab](https://github.com/Sara-Shafiee-lab)**, home of the DFF-funded [**RECODE**](https://github.com/Sara-Shafiee-lab/RECODE) project.
