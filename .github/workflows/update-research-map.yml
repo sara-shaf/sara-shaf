@@ -1,0 +1,28 @@
+name: Update research map
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"   # every Monday 07:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch new publications and redraw the map
+        run: python update_research_map.py
+      - name: Save changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase
+          git add research-map-data.json assets/research-map.svg assets/research-evolution.svg
+          git diff --staged --quiet || git commit -m "Update research map from ORCID"
+          git push
