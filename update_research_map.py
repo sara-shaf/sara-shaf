@@ -225,8 +225,8 @@ def main():
     data["pubs"].sort(key=lambda p: (-p["y"], p["t"]))
     json.dump(data, open(DATA_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     os.makedirs("assets", exist_ok=True)
-    draw_map(data, "assets/research-map.svg")
-    draw_evolution(data, "assets/research-evolution.svg")
+    draw_map(data, "assets/research-map-v2.svg")
+    draw_evolution(data, "assets/research-evolution-v2.svg")
     print(f"Drew research map with {len(data['pubs'])} publications.")
 
 
