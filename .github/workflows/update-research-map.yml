@@ -16,6 +16,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install libraries
+        run: pip install numpy scikit-learn
       - name: Fetch new publications and redraw the map
         run: python update_research_map.py
       - name: Save changes
