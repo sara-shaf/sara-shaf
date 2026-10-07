@@ -1,7 +1,8 @@
 """Weekly research-map updater for the GitHub profile (sara-shaf/sara-shaf).
 
 1. Fetches works from ORCID and adds papers not yet on the map (nothing is ever removed).
-2. Redraws assets/research-map.svg and assets/research-evolution.svg from research-map-data.json.
+2. Embeds all paper titles (TF-IDF + t-SNE) and draws assets/research-map.svg,
+   plus a per-year chart in assets/research-evolution.svg. Both are animated SVGs.
 """
 import json, math, os, re, sys, urllib.request
 from collections import Counter
@@ -20,8 +21,11 @@ THEME_RULES = [
     ("pcs",   r"."),
 ]
 COL = {"pcs": "#7dd3fc", "agile": "#a78bfa", "aec": "#34d399", "rec": "#f472b6", "org": "#94a3b8", "ai": "#fbbf24", "other": "#fb923c"}
-HUB = {"pcs": (290, 290), "agile": (560, 160), "rec": (860, 180), "ai": (690, 420), "aec": (130, 500), "other": (440, 520), "org": (960, 490)}
+SHORT = {"pcs": "Product configuration", "agile": "Agile & model-driven", "aec": "Construction & modular",
+         "rec": "Recommender systems", "org": "Digital transformation", "ai": "AI agents & manufacturing", "other": "Beyond engineering"}
 ORDER = ["pcs", "agile", "aec", "org", "rec", "ai", "other"]
+MONO = 'font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"'
+SANS = 'font-family="Segoe UI, Helvetica, Arial, sans-serif"'
 
 
 def norm(t):
@@ -60,90 +64,156 @@ def update_from_orcid(data):
         print("Added:", year, title)
 
 
-def wrap(text, n=22):
-    lines, cur = [], ""
-    for w in text.split():
-        if len(cur + " " + w) > n and cur:
-            lines.append(cur); cur = w
-        else:
-            cur = (cur + " " + w).strip()
-    return lines + [cur]
+def embed(pubs):
+    """2-D map of paper titles: TF-IDF features (+ theme hint) -> SVD -> t-SNE."""
+    import numpy as np
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.decomposition import TruncatedSVD
+    from sklearn.manifold import TSNE
+    X = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), min_df=1, sublinear_tf=True).fit_transform([p["t"] for p in pubs])
+    X = TruncatedSVD(n_components=min(40, X.shape[1] - 1), random_state=7).fit_transform(X)
+    X = X / (np.linalg.norm(X, axis=1, keepdims=True) + 1e-9)
+    onehot = np.array([[1.0 if p["th"] == k else 0.0 for k in ORDER] for p in pubs]) * 1.1
+    Z = TSNE(n_components=2, perplexity=min(15, len(pubs) - 1), random_state=7, init="pca").fit_transform(np.hstack([X, onehot]))
+    return Z, X
+
+
+def halo_text(x, y, text, size, fill, weight=700, anchor="middle", extra=""):
+    base = f'x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}" {SANS} font-size="{size}" font-weight="{weight}" {extra}'
+    return (f'<text {base} stroke="#0b0e22" stroke-width="7" stroke-linejoin="round" fill="#0b0e22">{escape(text)}</text>'
+            f'<text {base} fill="{fill}">{escape(text)}</text>')
 
 
 def draw_map(data, path):
-    W, H = 1100, 700
-    names = {t["k"]: t["n"] for t in data["themes"]}
-    latest = max(p["y"] for p in data["pubs"])
-    o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Research map: {len(data["pubs"])} publications grouped by theme">',
-         '<defs><radialGradient id="bg" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#1b2150"/><stop offset="1" stop-color="#0f1226"/></radialGradient>'
-         '<radialGradient id="glow"><stop offset="0" stop-color="#fbbf24" stop-opacity=".55"/><stop offset="1" stop-color="#fbbf24" stop-opacity="0"/></radialGradient></defs>',
-         f'<rect width="{W}" height="{H}" rx="18" fill="url(#bg)"/>']
-    golden = math.pi * (3 - math.sqrt(5))
+    import numpy as np
+    pubs = data["pubs"]
+    Z, X = embed(pubs)
+    W, H = 1100, 820
+    x0, x1, y0, y1 = 70, 1030, 165, 720
+    mn, mx = Z.min(0), Z.max(0)
+    P = (Z - mn) / (mx - mn + 1e-9)
+    P[:, 0] = x0 + P[:, 0] * (x1 - x0)
+    P[:, 1] = y0 + P[:, 1] * (y1 - y0)
+    years = [p["y"] for p in pubs]
+    ymin, ymax = min(years), max(years)
+    span = ymax - ymin + 1
+    LOOP = 18.0                                   # seconds per animation loop
+    grow = 0.72                                   # share of the loop used to "train"
+    t_of = lambda y: (y - ymin) / span * grow
+    o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" '
+         f'aria-label="Research embedding map of {len(pubs)} publications in {len(ORDER)} clusters, {ymin} to {ymax}">',
+         '<defs><radialGradient id="bg" cx=".5" cy=".5" r=".8"><stop offset="0" stop-color="#171d48"/><stop offset="1" stop-color="#0b0e22"/></radialGradient>'
+         '<radialGradient id="gold"><stop offset="0" stop-color="#fbbf24" stop-opacity=".6"/><stop offset="1" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>'
+         '<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#6366f1" stroke-opacity=".08"/></pattern></defs>',
+         f'<rect width="{W}" height="{H}" rx="18" fill="url(#bg)"/><rect x="0" y="120" width="{W}" height="{H-185}" fill="url(#grid)"/>']
+    # terminal header
+    o.append(f'<rect x="18" y="16" width="{W-36}" height="88" rx="12" fill="#0b0e22" stroke="#2a2f52"/>')
+    for i, c in enumerate(["#f87171", "#fbbf24", "#34d399"]):
+        o.append(f'<circle cx="{40+i*20}" cy="36" r="6" fill="{c}"/>')
+    o.append(f'<text x="40" y="68" {MONO} font-size="21" fill="#7dd3fc">$ embed --papers {len(pubs)} --method tfidf+tsne</text>')
+    o.append(f'<text x="40" y="94" {MONO} font-size="19" fill="#9aa3bf">&#8594; {len(ORDER)} research clusters &#183; {ymin}&#8211;{ymax}</text>')
+    o.append(f'<text x="{W-120}" y="68" text-anchor="end" {MONO} font-size="19" fill="#9aa3bf">epoch</text>')
+    for y in range(ymin, ymax + 1):
+        a, b = t_of(y), (t_of(y + 1) if y < ymax else 1.0)
+        vis = "visible" if y == ymax else "hidden"
+        o.append(f'<text x="{W-60}" y="94" text-anchor="end" {MONO} font-size="30" font-weight="700" fill="#fbbf24" visibility="{vis}">{y}'
+                 f'<animate attributeName="visibility" values="hidden;visible;hidden" keyTimes="0;{a:.4f};{min(b,0.9999):.4f}" calcMode="discrete" dur="{LOOP}s" repeatCount="indefinite"/></text>')
+    o.append(f'<rect x="{W-54}" y="70" width="12" height="26" fill="#7dd3fc"><animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite"/></rect>')
+    # nearest-neighbour graph (in embedding space) for a neural-network look
+    D = ((P[:, None, :] - P[None, :, :]) ** 2).sum(-1)
+    np.fill_diagonal(D, 1e9)
+    edges = set()
+    for i in range(len(pubs)):
+        for j in np.argsort(D[i])[:3]:
+            if D[i, j] > 130 ** 2:
+                continue
+            edges.add(tuple(sorted((i, int(j)))))
+    for i, j in sorted(edges):
+        a = t_of(max(years[i], years[j]))
+        o.append(f'<line x1="{P[i,0]:.1f}" y1="{P[i,1]:.1f}" x2="{P[j,0]:.1f}" y2="{P[j,1]:.1f}" stroke="#818cf8" stroke-opacity=".22" stroke-width="1.2">'
+                 f'<animate attributeName="stroke-opacity" values="0;0;.22;.22" keyTimes="0;{a:.4f};{a+.03:.4f};1" dur="{LOOP}s" repeatCount="indefinite"/></line>')
+    # signals travelling between cluster centres
+    cent = {k: P[[i for i, p in enumerate(pubs) if p["th"] == k]].mean(0) for k in ORDER if any(p["th"] == k for p in pubs)}
+    route = [k for k in ["pcs", "agile", "rec", "ai", "aec", "org", "other"] if k in cent]
+    for n, (a, b) in enumerate(zip(route, route[1:] + route[:1])):
+        (ax, ay), (bx, by) = cent[a], cent[b]
+        o.append(f'<path id="sig{n}" d="M{ax:.1f},{ay:.1f} L{bx:.1f},{by:.1f}" stroke="#fbbf24" stroke-opacity=".10" stroke-dasharray="3 7"/>')
+        o.append(f'<circle r="3.5" fill="#fde68a"><animateMotion dur="{3.2+n*.4:.1f}s" begin="{n*.5:.1f}s" repeatCount="indefinite"><mpath href="#sig{n}"/></animateMotion></circle>')
+    # dots
+    for i, p in enumerate(pubs):
+        x, y = P[i]
+        a = t_of(p["y"])
+        r = 8 if p.get("j") else 5.5
+        c = COL[p["th"]]
+        anim = f'<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;{a:.4f};{a+.025:.4f};1" dur="{LOOP}s" repeatCount="indefinite"/>'
+        if p["y"] >= ymax - 1:
+            o.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r*2.8:.1f}" fill="url(#gold)">{anim}'
+                     f'<animate attributeName="r" values="{r*2:.1f};{r*3.2:.1f};{r*2:.1f}" dur="2.4s" repeatCount="indefinite"/></circle>')
+        o.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{c}" stroke="#0b0e22" stroke-width="1.5"><title>{p["y"]}: {escape(p["t"])}</title>{anim}</circle>')
+    # cluster labels (large, readable on phones)
+    placed = []
     for k in ORDER:
-        ps = sorted([p for p in data["pubs"] if p["th"] == k], key=lambda p: p["y"])
-        if not ps:
+        if k not in cent:
             continue
-        hx, hy, c = *HUB[k], COL[k]
-        pts = []
-        for i, p in enumerate(ps):
-            rr = 34 + 9.2 * math.sqrt(i + 1)
-            a = i * golden
-            pts.append((hx + rr * math.cos(a), hy + rr * math.sin(a), p))
-        for x, y, p in pts:
-            o.append(f'<line x1="{hx}" y1="{hy}" x2="{x:.1f}" y2="{y:.1f}" stroke="{c}" stroke-opacity=".15"/>')
-        o.append(f'<circle cx="{hx}" cy="{hy}" r="27" fill="{c}" fill-opacity=".13" stroke="{c}" stroke-opacity=".6">'
-                 f'<animate attributeName="r" values="25;30;25" dur="4s" repeatCount="indefinite"/></circle>')
-        o.append(f'<circle cx="{hx}" cy="{hy}" r="8" fill="{c}"/>')
-        for i, (x, y, p) in enumerate(pts):
-            r = 6.5 if p.get("j") else 4.2
-            if p["y"] >= latest - 1:
-                o.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r*2.6:.1f}" fill="url(#glow)">'
-                         f'<animate attributeName="opacity" values=".2;1;.2" dur="3s" begin="{(i%5)*.6}s" repeatCount="indefinite"/></circle>')
-            o.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{c}" stroke="#0f1226" stroke-width="1.2"><title>{p["y"]}: {escape(p["t"])}</title></circle>')
-        bottom = max(y for _, y, _ in pts) + 26
-        label = wrap(names[k]) + [f"{len(ps)} publications"]
-        for layer in ("halo", "ink"):
-            attrs = 'stroke="#0f1226" stroke-width="5" stroke-linejoin="round" fill="#0f1226"' if layer == "halo" else 'fill="#e6e8f2"'
-            t = [f'<text x="{hx}" y="{bottom:.0f}" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" {attrs}>']
-            for i, l in enumerate(label):
-                last = i == len(label) - 1
-                extra = ' font-weight="400" font-size="12.5"' + ('' if layer == "halo" else ' fill="#9aa3bf"') if last else ''
-                t.append(f'<tspan x="{hx}" dy="{0 if i == 0 else 17}"{extra}>{escape(l)}</tspan>')
-            o.append("".join(t) + "</text>")
-    o.append(f'<text x="24" y="{H-20}" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#9aa3bf">Each dot is a publication · larger dots are journal articles · glowing dots are from {latest-1}–{latest}</text>')
+        idx = [i for i, p in enumerate(pubs) if p["th"] == k]
+        cx = float(np.median(P[idx, 0])); top = float(P[idx, 1].min())
+        half = len(f"{SHORT[k]} · {len(idx)}") * 24 * 0.30
+        ly = max(150, top - 16)
+        lx = min(max(cx, half + 24), W - half - 24)
+        moved = True
+        while moved:
+            moved = False
+            for (px, py, ph) in placed:
+                if abs(px - lx) < ph + half + 12 and abs(py - ly) < 32:
+                    ly = py - 34 if ly <= py else py + 34
+                    moved = True
+        placed.append((lx, ly, half))
+        o.append(halo_text(lx, ly, f"{SHORT[k]} · {len(idx)}", 24, COL[k]))
+    o.append(halo_text(W / 2, H - 52, "each dot is a paper · closeness = similar topics (TF-IDF + t-SNE of titles)", 19, "#c9cde0", 400))
+    o.append(halo_text(W / 2, H - 24, f"bigger = journal article · glowing = {ymax-1}–{ymax} · updates weekly from ORCID", 19, "#9aa3bf", 400))
     o.append("</svg>")
     open(path, "w", encoding="utf-8").write("\n".join(o))
 
 
 def draw_evolution(data, path):
-    W, H, L, R, T, B = 1100, 400, 44, 16, 20, 130
-    years = list(range(min(p["y"] for p in data["pubs"]), max(p["y"] for p in data["pubs"]) + 1))
-    cnt = Counter((p["y"], p["th"]) for p in data["pubs"])
-    mx = max(sum(cnt[(y, k)] for k in ORDER) for y in years)
-    mx = int(math.ceil(mx / 4.0) * 4)
-    pw, ph = W - L - R, H - T - B
+    pubs = data["pubs"]
+    W, H, L, R, T = 1100, 560, 60, 24, 130
+    years = list(range(min(p["y"] for p in pubs), max(p["y"] for p in pubs) + 1))
+    cnt = Counter((p["y"], p["th"]) for p in pubs)
+    top = max(sum(cnt[(y, k)] for k in ORDER) for y in years)
+    top = int(math.ceil(top / 4.0) * 4)
+    ph = 260
+    pw = W - L - R
     bw = pw / len(years)
-    sy = lambda v: T + ph - v / mx * ph
-    o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Publications per year by theme">',
-         f'<rect width="{W}" height="{H}" rx="18" fill="#0f1226"/>']
-    F = 'font-family="Segoe UI, Helvetica, Arial, sans-serif"'
-    for v in range(0, mx + 1, 4):
-        o.append(f'<line x1="{L}" x2="{W-R}" y1="{sy(v):.1f}" y2="{sy(v):.1f}" stroke="#2a2f52"/><text x="{L-8}" y="{sy(v)+4:.1f}" text-anchor="end" {F} font-size="12" fill="#9aa3bf">{v}</text>')
+    sy = lambda v: T + ph - v / top * ph
+    o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Publications per year by research cluster">',
+         f'<rect width="{W}" height="{H}" rx="18" fill="#0b0e22"/>',
+         f'<rect x="18" y="16" width="{W-36}" height="66" rx="12" fill="#0f1226" stroke="#2a2f52"/>']
+    for i, c in enumerate(["#f87171", "#fbbf24", "#34d399"]):
+        o.append(f'<circle cx="{40+i*20}" cy="36" r="6" fill="{c}"/>')
+    o.append(f'<text x="40" y="68" {MONO} font-size="21" fill="#7dd3fc">$ plot papers_per_year --hue cluster</text>')
+    for v in range(0, top + 1, 4):
+        o.append(f'<line x1="{L}" x2="{W-R}" y1="{sy(v):.1f}" y2="{sy(v):.1f}" stroke="#2a2f52"/>'
+                 f'<text x="{L-10}" y="{sy(v)+7:.1f}" text-anchor="end" {SANS} font-size="20" fill="#9aa3bf">{v}</text>')
     for i, y in enumerate(years):
-        x = L + i * bw + bw * 0.18
-        acc = 0
+        x = L + i * bw + bw * 0.14
+        acc, delay = 0, i * 0.18
         for k in ORDER:
             n = cnt[(y, k)]
-            if n:
-                o.append(f'<rect x="{x:.1f}" y="{sy(acc+n):.1f}" width="{bw*0.64:.1f}" height="{sy(acc)-sy(acc+n):.1f}" rx="2" fill="{COL[k]}"><title>{y}: {n}</title></rect>')
-                acc += n
-        o.append(f'<text x="{x + bw*0.32:.1f}" y="{T+ph+18}" text-anchor="middle" {F} font-size="12" fill="#9aa3bf">{y}</text>')
-    names = {t["k"]: t["n"] for t in data["themes"]}
+            if not n:
+                continue
+            ya, yb = sy(acc + n), sy(acc)
+            o.append(f'<rect x="{x:.1f}" y="{ya:.1f}" width="{bw*0.72:.1f}" height="{yb-ya:.1f}" rx="3" fill="{COL[k]}"><title>{y}: {n} · {escape(SHORT[k])}</title>'
+                     f'<animate attributeName="height" from="0" to="{yb-ya:.1f}" begin="{delay:.2f}s" dur=".6s" fill="freeze"/>'
+                     f'<animate attributeName="y" from="{sy(0):.1f}" to="{ya:.1f}" begin="{delay:.2f}s" dur=".6s" fill="freeze"/></rect>')
+            acc += n
+        if i % 2 == 0 or len(years) <= 8:
+            o.append(f'<text x="{x + bw*0.36:.1f}" y="{T+ph+30}" text-anchor="middle" {SANS} font-size="20" fill="#9aa3bf">{y}</text>')
     colw = (W - L - R) / 2
     for i, k in enumerate(ORDER):
         lx = L + (i % 2) * colw
-        ly = H - 78 + (i // 2) * 20
-        o.append(f'<circle cx="{lx+5:.1f}" cy="{ly-4}" r="5" fill="{COL[k]}"/><text x="{lx+15:.1f}" y="{ly}" {F} font-size="12.5" fill="#c9cde0">{escape(names[k])}</text>')
+        ly = T + ph + 74 + (i // 2) * 30
+        o.append(f'<circle cx="{lx+8:.1f}" cy="{ly-7}" r="8" fill="{COL[k]}"/><text x="{lx+24:.1f}" y="{ly}" {SANS} font-size="21" fill="#e6e8f2">{escape(SHORT[k])}</text>')
     o.append("</svg>")
     open(path, "w", encoding="utf-8").write("\n".join(o))
 
