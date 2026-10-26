@@ -211,8 +211,8 @@ My group's shared space on GitHub is **[Sara Shafiee Lab](https://github.com/Sar
 | Paper | Venue | Code |
 |---|---|---|
 | CPJudgeBench: Meta-Evaluation of LLM Judges for Constraint Programming through Solution-Space Semantics | EMNLP 2026 (Main) | [Nastaran95/CPJudgeBench](https://github.com/Nastaran95/CPJudgeBench) |
-| Evaluating Agentic AI Systems in Manufacturing: A Review of Taxonomy, Challenges, and Future Directions | AAIML 2026 | [Nastaran95/manufacturing-agentic-evaluation](https://github.com/Nastaran95/manufacturing-agentic-evaluation) |
-| Agentic Data Analysis for Intelligent Manufacturing: Benchmark-Driven Evaluation of Agentic vs. Direct LLM Approaches | CIRPe 2025 | [Nastaran95/agentic-man-da](https://github.com/Nastaran95/agentic-man-da) |
+| [Evaluating Agentic AI Systems in Manufacturing: A Review of Taxonomy, Challenges, and Future Directions](https://doi.org/10.1109/AAIML67890.2026.11498174) | AAIML 2026 | [Nastaran95/manufacturing-agentic-evaluation](https://github.com/Nastaran95/manufacturing-agentic-evaluation) |
+| [Agentic Data Analysis for Intelligent Manufacturing: Benchmark-Driven Evaluation of Agentic vs. Direct LLM Approaches](https://doi.org/10.1016/j.procir.2025.09.043) | CIRPe 2025 | [Nastaran95/agentic-man-da](https://github.com/Nastaran95/agentic-man-da) |
 | Advancing reliable evaluation of AI-generated constraint models | 🔒 Coming soon | [CPJudgeBenchPlus](https://github.com/Nastaran95/CPJudgeBenchPlus) |
 | Understanding how AI is used to evaluate code | 🔒 Coming soon | [meta-eval-for-code](https://github.com/Nastaran95/meta-eval-for-code) |
 | AI agents for analysing building information models | 🔒 Coming soon | [SmartBIM-Agent](https://github.com/Nastaran95/SmartBIM-Agent) |
