@@ -41,6 +41,8 @@ I'm a Senior Researcher / Associate Professor at DTU's Department of Civil and M
 
 ### 📚 Recent publications
 
+🆕 **New preprint (Oct 2026):** [LLM-Based Agentic AI in Manufacturing: A Scoping Review of Applications, System Designs and Evaluation Practices](https://doi.org/10.20944/preprints202610.2479.v1) — N. Moradzadeh Farid, S. Shafiee · *Preprints.org* · a review of 164 studies on LLM agents in manufacturing and how they are evaluated.
+
 <!--PUBLICATIONS:START-->
 - [How Consumer Attention Shapes Personalized Experiences in Generative AI Products: A Configurational Perspective](https://doi.org/10.1111/ijcs.70199) — International Journal of Consumer Studies · 2026
 - [Evaluating Agentic AI Systems in Manufacturing: A Review of Taxonomy, Challenges and Future Directions](https://doi.org/10.1109/AAIML67890.2026.11498174) — Proceedings of the 2026 International Conference on Advances in Artificial Intelligence and Machine Learning · 2026
