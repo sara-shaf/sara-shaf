@@ -204,6 +204,15 @@ Click a cluster to see its papers. Newest first.
 
 <!--CLUSTERS:END-->
 
+### 🔒 Projects in progress
+
+| Project | What it studies | Status |
+|---|---|---|
+| **CLIFF** (Configuration Limits of LLM agents: Finding the Frontier) | How complex a product can become before an LLM agent can no longer configure it correctly without a solver | 🔒 Private · pilot stage |
+| **Manufacturing agent** | Tool-grounded design-for-manufacturing assessment and agent-operated engineering simulation | 🔒 Private · research prototype |
+
+<sub>Code is private during development. For collaboration or access, contact sashaf [at] dtu [dot] dk.</sub>
+
 ### 🧑‍🔬 Research code & lab
 
 My group's shared space on GitHub is **[Sara Shafiee Lab](https://github.com/Sara-Shafiee-lab)**, home of the DFF-funded [**RECODE**](https://github.com/Sara-Shafiee-lab/RECODE) project.
