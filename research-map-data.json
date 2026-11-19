@@ -54,7 +54,8 @@
    ],
    "j": false,
    "code": "https://github.com/Nastaran95/CPJudgeBench",
-   "th": "ai"
+   "th": "ai",
+   "doi": "10.18653/2026.emnlp-main.1648"
   },
   {
    "t": "Evaluating Agentic AI Systems in Manufacturing: A Review of Taxonomy, Challenges and Future Directions",
@@ -1198,7 +1199,8 @@
     "L. Hvam"
    ],
    "j": false,
-   "th": "pcs"
+   "th": "pcs",
+   "doi": "10.1109/IEEM.2016.7797960"
   },
   {
    "t": "QUANTIFICATION OF BENEFITS AND COST FROM APPLYING A PRODUCT CONFIGURATION SYSTEM",

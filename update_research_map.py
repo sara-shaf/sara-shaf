@@ -1,6 +1,7 @@
 """Weekly research-map updater for the GitHub profile (sara-shaf/sara-shaf).
 
-1. Fetches works from ORCID and adds papers not yet on the map (nothing is ever removed).
+1. Fetches works from ORCID, adds papers not yet on the map and fills in missing DOIs
+   (nothing is ever removed).
 2. Embeds all paper titles (TF-IDF + t-SNE) and draws assets/research-map.svg,
    plus a per-year chart, and refreshes the "Explore the clusters" list in README.md.
 """
@@ -45,22 +46,46 @@ def get(url):
         return json.load(r)
 
 
+def doi_for(group):
+    """The DOI of an ORCID work group, from any of its summaries or group ids."""
+    ids = list(((group.get("external-ids") or {}).get("external-id")) or [])
+    for s in group.get("work-summary") or []:
+        ids += ((s.get("external-ids") or {}).get("external-id")) or []
+    for i in ids:
+        if (i.get("external-id-type") or "").lower() == "doi" and i.get("external-id-value"):
+            return re.sub(r"^(https?://(dx\.)?doi\.org/|doi:)", "", i["external-id-value"].strip(), flags=re.I)
+    return None
+
+
 def update_from_orcid(data):
     try:
         groups = get(f"https://pub.orcid.org/v3.0/{ORCID_ID}/works").get("group", [])
     except Exception as e:
         print("ORCID not reachable, keeping current data:", e)
         return
-    known = {norm(p["t"]) for p in data["pubs"]}
+    by_title = {norm(p["t"]): p for p in data["pubs"]}
     for g in groups:
         s = (g.get("work-summary") or [{}])[0]
         title = (((s.get("title") or {}).get("title") or {}).get("value") or "").strip()
         year = ((s.get("publication-date") or {}).get("year") or {}).get("value")
-        if not title or not year or norm(title) in known or any(title.lower().startswith(x) for x in EXCLUDE):
+        doi = doi_for(g)
+        if not title or any(title.lower().startswith(x) for x in EXCLUDE):
             continue
-        data["pubs"].append({"t": title, "y": int(year), "v": ((s.get("journal-title") or {}).get("value") or ""),
-                             "a": ["S. Shafiee"], "j": s.get("type") == "journal-article", "th": theme_for(title)})
-        known.add(norm(title))
+        known = by_title.get(norm(title))
+        if known is not None:
+            # Papers added before publication get their DOI once ORCID has it.
+            if doi and not known.get("doi"):
+                known["doi"] = doi
+                print("DOI added:", doi, title)
+            continue
+        if not year:
+            continue
+        pub = {"t": title, "y": int(year), "v": ((s.get("journal-title") or {}).get("value") or ""),
+               "a": ["S. Shafiee"], "j": s.get("type") == "journal-article", "th": theme_for(title)}
+        if doi:
+            pub["doi"] = doi
+        data["pubs"].append(pub)
+        by_title[norm(title)] = pub
         print("Added:", year, title)
 
 
