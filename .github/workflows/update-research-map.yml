@@ -24,7 +24,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase
           git add research-map-data.json assets/research-map-v3.svg assets/research-evolution-v3.svg README.md
-          git diff --staged --quiet || git commit -m "Update research map from ORCID"
+          if git diff --staged --quiet; then echo "No changes to commit."; exit 0; fi
+          git commit -m "Update research map from ORCID"
+          git pull --rebase  # after committing: pulling with unstaged changes fails
           git push
